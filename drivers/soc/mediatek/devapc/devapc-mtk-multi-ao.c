@@ -121,29 +121,10 @@ static bool is_devapc_subsys_power_on(int slave_type)
 	}
 
 	list_for_each_entry(powercb, &powercb_list, list) {
-		if (slave_type == DEVAPC_TYPE_ADSP) {
-			if (powercb->type == DEVAPC_TYPE_ADSP && powercb->query_power)
-				return powercb->query_power() &
-					is_devapc_subsys_enabled(slave_type);
-			else
-				return false;
-		}
-
-		if (slave_type == DEVAPC_TYPE_MMINFRA) {
-			if (powercb->type == DEVAPC_TYPE_MMINFRA && powercb->query_power)
-				return powercb->query_power() &
-					is_devapc_subsys_enabled(slave_type);
-			else
-				return false;
-		}
-
-		if (slave_type == DEVAPC_TYPE_MMUP) {
-			if (powercb->type == DEVAPC_TYPE_MMUP && powercb->query_power)
-				return powercb->query_power() &
-					is_devapc_subsys_enabled(slave_type);
-			else
-				return false;
-		}
+		if (powercb->type == slave_type && powercb->query_power)
+			return powercb->query_power() & is_devapc_subsys_enabled(slave_type);
+		else
+			return false;
 	}
 
 	return false;
